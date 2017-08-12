@@ -1,4 +1,6 @@
+extern crate regex;
 use std::io::{self, BufRead};
+use regex::Regex;
 
 fn input() {
     println!("input id: ");
@@ -8,24 +10,16 @@ fn input() {
     stdin.lock().read_line(&mut id)
         .expect("input Error");
     let id = id.trim();
-    // if let Some('\n')=id.chars().next_back() {
-    //     id.pop();
-    // }
-    // if let Some('\r')=id.chars().next_back() {
-    //     id.pop();
-    // }
     check(&id)
 }
 
 fn check(id: &str) {
-    // if id.eq("DD") {
-    if id == "DD" {
+    let reg = Regex::new(r"^[a-zA-Z][12]\d{8}$").unwrap();
+    if reg.is_match(id) {
         println!("Y");
     }
     else {
-        println!("{}, {}", id.len(), "DD".to_owned().len());
-        println!("{}, {}", id, "DD");
-        println!("N");
+        println!("input id wrong format");
     }
 }
 
