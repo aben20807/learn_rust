@@ -18,7 +18,6 @@ fn check(id: &str) {
     if reg.is_match(id) {
         let id = id.to_uppercase();
         let id0 = &id[..1];
-        // String IdStr="";
         static COUNTRY_LIST: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let country_list_code: [i32; 26]=[10,11,12,13,14,15,16,17,34,18,19
             ,20,21,22,35,23,24,25,26,27,28,29,32,30,31,33];
@@ -26,8 +25,16 @@ fn check(id: &str) {
         let country_code = country_list_code[country_index];
         let mut sum = 0;
         sum += (country_code / 10) + (country_code % 10 * 9);
-        println!("{}", sum);
         for i in 1..(id.len()-1) {
+            sum += id[i..i+1].parse::<i32>().unwrap() * ((9-i) as i32);
+        }
+        let check_code = (10-sum%10)%10;
+        if id[9..10].parse::<i32>().unwrap() == check_code{
+            println!("Correct!!\n");
+        }
+        else {
+            println!("Check code error!\n");
+            input();
         }
     }
     else {
