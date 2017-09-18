@@ -1,12 +1,12 @@
 #[macro_use] extern crate text_io;
 
-fn search(s: &String, n: u32) -> &str{
+fn search(s: &String, n: u32) -> (bool, &str) {
     let bytes = s.as_bytes();
     let (mut start, mut word_count): (usize, u32) = (0, 1);
     let mut litem = b'0';
     for (i, &item) in bytes.iter().enumerate() {
         if word_count == n && item == b' ' {
-            return &s[start..i];
+            return (true, &s[start..i]);
         }
         if item != b' ' && litem == b' ' {
             start = i;
@@ -14,7 +14,10 @@ fn search(s: &String, n: u32) -> &str{
         }
         litem = item;
     }
-    &s[..] // not exist
+    if word_count == n {
+        return (true, &s[start..]);
+    }
+    (false, &s[..]) // not exist
 }
 
 fn main() {
@@ -28,7 +31,12 @@ fn main() {
         let a: u32;
         println!("input number:");
         scan!("{}", a);
-        let word = search(&s, a);
-        println!("The {} word is '{}'", a, word);
+        let (is_found, word) = search(&s, a);
+        if is_found == true {
+            println!("The {} word is '{}'", a, word);
+        }
+        else {
+            println!("Word not found");
+        }
     }
 }
