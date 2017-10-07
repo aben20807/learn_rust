@@ -8,17 +8,17 @@ fn main() {
     println!("{}, {}, {}", to_binary(minuend), to_binary(subtrahend), symbol);
 }
 
-fn statement_analysis(statement: String) -> (i32, char, i32) {
+fn statement_analysis(statement: String) -> (i8, char, i8) {
     for (i, c) in statement.chars().enumerate() {
         if i != 0 && (c == '+' || c == '-') {
-            let a = String::from(&statement[..i]).parse::<i32>().unwrap();
-            let b = String::from(&statement[i+1..]).parse::<i32>().unwrap();
+            let a = String::from(&statement[..i]).parse::<i8>().unwrap();
+            let b = String::from(&statement[i+1..]).parse::<i8>().unwrap();
             return (a, c, b)
         }
     }
     (0, '=', 0)
 }
 
-fn to_binary(n: i32) -> String {
+fn to_binary(n: i8) -> String {
     format!("{:08b}", n)
 }
