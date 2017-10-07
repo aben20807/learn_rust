@@ -1,0 +1,7 @@
+[package]
+name = "eight_bit_adder_subtractor"
+version = "0.1.0"
+authors = ["aben20807 <aben20807@gmail.com>"]
+
+[dependencies]
+text_io = "0.1.6"
