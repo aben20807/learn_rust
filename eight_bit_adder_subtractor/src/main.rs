@@ -4,15 +4,18 @@ fn main() {
     println!("Input: ");
     let s: String;
     scan!("{}\n", s);
-    let f = binary_analysis(s);
+    let (minuend, symbol, subtrahend) = statement_analysis(s);
+    println!("{}, {}, {}", minuend, subtrahend, symbol);
 }
 
-fn binary_analysis(formula: String) {// -> (String, char, String) {
-    for (i, c) in formula.chars().enumerate() {
-        if c == '+' || c == '-' {
-            let a = String::from(&formula[..i]).parse::<i32>().unwrap();
-            let b = String::from(&formula[i+1..]).parse::<i32>().unwrap();
-            println!("symbol {}, {}", a, b);
+fn statement_analysis(statement: String) -> (i32, char, i32) {
+    for (i, c) in statement.chars().enumerate() {
+        if i != 0 && (c == '+' || c == '-') {
+            let a = String::from(&statement[..i]).parse::<i32>().unwrap();
+            let b = String::from(&statement[i+1..]).parse::<i32>().unwrap();
+            // println!("symbol {}, {}", a, b);
+            return (a, c, b)
         }
     }
+    (0, '=', 0)
 }
