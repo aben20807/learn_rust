@@ -5,7 +5,15 @@ fn main() {
     let s: String;
     scan!("{}\n", s);
     let (a, symbol, b) = statement_analysis(s);
-    plus(dec_to_bin(a), dec_to_bin(b), true);
+    if symbol == '+' {
+        plus(dec_to_bin(a), dec_to_bin(b), true);
+    }
+    else if symbol == '-' {
+        minus(dec_to_bin(a), dec_to_bin(b), true);
+    }
+    else {
+        println!("Wrong symbol!");
+    }
 }
 
 fn statement_analysis(statement: String) -> (i8, char, i8) {
@@ -50,7 +58,6 @@ fn dec_to_bin(n: i8) -> String {
     else {
         ans = ans.chars().rev().collect::<String>()
     }
-    // format!("{:08b}", n)
     ans
 }
 
@@ -83,6 +90,6 @@ fn plus(a: String, b: String, display_process: bool) -> String {
     ans
 }
 
-fn minus(a: String, b: String) {
+fn minus(a: String, b: String, display_process: bool) {
 
 }
