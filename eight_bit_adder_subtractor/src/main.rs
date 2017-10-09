@@ -6,10 +6,10 @@ fn main() {
     scan!("{}\n", s);
     let (a, symbol, b) = statement_analysis(s);
     if symbol == '+' {
-        plus(dec_to_bin(a), dec_to_bin(b), true);
+        plus(&dec_to_bin(a), &dec_to_bin(b), true);
     }
     else if symbol == '-' {
-        minus(dec_to_bin(a), dec_to_bin(b), true);
+        minus(&dec_to_bin(a), &dec_to_bin(b), true);
     }
     else {
         println!("Wrong symbol!");
@@ -46,9 +46,9 @@ fn dec_to_bin(n: i8) -> String {
         count = count + 1;
     }
     if is_neg {
-        ans = one_s_complement(&ans);
         ans = ans.chars().rev().collect::<String>();
-        ans = plus(ans, String::from("00000001"), false);
+        ans = two_s_complement(&ans);
+        // ans = plus(ans, String::from("00000001"), false);
     }
     else {
         ans = ans.chars().rev().collect::<String>()
@@ -58,7 +58,7 @@ fn dec_to_bin(n: i8) -> String {
 
 fn one_s_complement(input: &String) -> String {
     let mut ans = String::from("");
-    for i in (0..8) {
+    for i in 0..8 {
         let old_bit = String::from(&input[i..i+1]).parse::<i8>().unwrap();
         let bit = (old_bit + 1) % 2;
         ans.push_str(&bit.to_string()[..]);
@@ -66,7 +66,11 @@ fn one_s_complement(input: &String) -> String {
     ans
 }
 
-fn plus(a: String, b: String, display_process: bool) -> String {
+fn two_s_complement(input: &String) -> String {
+    plus(&one_s_complement(input), &String::from("00000001"), false)
+}
+
+fn plus(a: &String, b: &String, display_process: bool) -> String {
     if display_process {
         println!("\t{}\n+)\t{}", a, b);
     }
@@ -95,7 +99,7 @@ fn plus(a: String, b: String, display_process: bool) -> String {
     ans
 }
 
-fn minus(a: String, b: String, display_process: bool) {
+fn minus(a: &String, b: &String, display_process: bool) {
     // let b_complement
 
 }
