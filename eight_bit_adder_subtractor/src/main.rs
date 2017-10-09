@@ -27,8 +27,8 @@ fn statement_analysis(statement: String) -> (i8, char, i8) {
     (0, '=', 0)
 }
 
-fn dec_to_bin(n: i8) -> String {
-    let mut dec:i32 = n as i32; // Because -128 * (-1) will overflow
+fn dec_to_bin(input: i8) -> String {
+    let mut dec:i32 = input as i32; // Because -128 * (-1) will overflow
     let mut ans = String::from("");
     let mut count = 0;
     let mut is_neg = false;
@@ -52,6 +52,25 @@ fn dec_to_bin(n: i8) -> String {
     else {
         ans
     }
+}
+
+fn bin_to_dec(input: &String) -> i8 {
+    let mut ans = 0i8;
+    let base = 2i8;
+    if &input[..1] == "0" {
+        for i in 0..7 {
+            ans = ans + base.pow(i as u32)*(String::from(&input[7-i..8-i]).parse::<i8>().unwrap());
+        }
+    }
+    else {
+        let tmp = two_s_complement(&input, false);
+        for i in 0..7 {
+            ans = ans + base.pow(i as u32)*(String::from(&tmp[7-i..8-i]).parse::<i8>().unwrap());
+        }
+        ans = ans * (-1);
+    }
+    println!("{}", ans);
+    ans
 }
 
 fn one_s_complement(input: &String) -> String {
