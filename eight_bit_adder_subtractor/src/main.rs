@@ -116,12 +116,12 @@ fn plus(a: &String, b: &String, can_display_process: bool) -> (String, i8) {
     ans = ans.chars().rev().collect::<String>();
     if can_display_process {
         println!("─────────────────");
-        println!("\t{} ({}) [carry: {}]\n", ans, bin_to_dec(&ans), carry);
+        println!("\t{} ({})\t[carry: {}]\n", ans, bin_to_dec(&ans), carry);
     }
     (ans, carry)
 }
 
-fn minus(a: &String, b: &String, can_display_process: bool) -> String {
+fn minus(a: &String, b: &String, can_display_process: bool) -> (String, i8) {
     if can_display_process {
         println!("\n\t{} ({})\n-)\t{} ({})", a, bin_to_dec(&a), b, bin_to_dec(&b));
         println!("─────────────────");
@@ -129,9 +129,9 @@ fn minus(a: &String, b: &String, can_display_process: bool) -> String {
     let b_complement = two_s_complement(&b, false);
     let (ans, carry) = plus(&a, &b_complement, false);
     if can_display_process {
-        println!("\t{}\n+)\t{} ({}) [2's]", a, b_complement, bin_to_dec(&b_complement));
+        println!("\t{} ({})\n+)\t{} ({})\t[2's]", a, bin_to_dec(&a), b_complement, bin_to_dec(&b_complement));
         println!("─────────────────");
-        println!("\t{} ({}) [carry: {}]\n", ans, bin_to_dec(&ans), carry);
+        println!("\t{} ({})\t[carry: {}]\n", ans, bin_to_dec(&ans), carry);
     }
-    ans
+    (ans, carry)
 }
