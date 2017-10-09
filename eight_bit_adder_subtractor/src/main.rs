@@ -5,8 +5,7 @@ fn main() {
     let s: String;
     scan!("{}\n", s);
     let (a, symbol, b) = statement_analysis(s);
-    // println!("{} {} {}", to_binary(a), symbol, to_binary(b));
-    plus(to_binary(a), to_binary(b));
+    plus(dec_to_bin(a), dec_to_bin(b), true);
 }
 
 fn statement_analysis(statement: String) -> (i8, char, i8) {
@@ -20,34 +19,68 @@ fn statement_analysis(statement: String) -> (i8, char, i8) {
     (0, '=', 0)
 }
 
-fn to_binary(n: i8) -> String {
-    format!("{:08b}", n)
+fn dec_to_bin(n: i8) -> String {
+    let mut dec:i32 = n as i32; // Because -128 * (-1) will overflow
+    let mut ans = String::from("");
+    let mut count = 0;
+    let mut is_neg = false;
+    if dec < 0 {
+        dec = dec * (-1);
+        is_neg = true;
+    }
+    while dec > 0 {
+        ans.push_str(&(dec % 2).to_string()[..]);
+        dec = dec / 2;
+        count = count + 1;
+    }
+    while 8 - count > 0 {
+        ans.push('0');
+        count = count + 1;
+    }
+    if is_neg {
+        let old_ans = ans;
+        ans = String::from("");
+        for i in (0..8).rev() {
+            let old_bit = String::from(&old_ans[i..i+1]).parse::<i8>().unwrap();
+            let bit = (old_bit + 1) % 2;
+            ans.push_str(&bit.to_string()[..]);
+        }
+        ans = plus(ans, String::from("00000001"), false);
+    }
+    else {
+        ans = ans.chars().rev().collect::<String>()
+    }
+    // format!("{:08b}", n)
+    ans
 }
 
-fn plus(a: String, b: String) {
-    println!("\t{}\n+)\t{}", a, b);
+fn plus(a: String, b: String, display_process: bool) -> String {
+    if display_process {
+        println!("\t{}\n+)\t{}", a, b);
+    }
     let mut ans = String::from("");
     let mut carry = 0i8;
-    let mut bit_s = 0i8;
+    let mut bit_s: i8;
     for i in (0..8).rev() {
         let bit_a = String::from(&a[i..i+1]).parse::<i8>().unwrap();
         let bit_b = String::from(&b[i..i+1]).parse::<i8>().unwrap();
         let bit_add = bit_a + bit_b + carry;
         if  bit_add > 1 {
             bit_s = if bit_add == 2 {0} else {1};
-            // println!("{}", bit_a);
             carry = 1;
         }
         else {
             bit_s = bit_add;
             carry = 0;
         }
-        // println!("{}", bit_s);
         ans.push_str(&bit_s.to_string()[..]);
     }
     ans = ans.chars().rev().collect::<String>();
-    println!("─────────────────");
-    println!("\t{}\ncarry: {}", ans, carry);
+    if display_process {
+        println!("─────────────────");
+        println!("\t{} (carry: {})", ans, carry);
+    }
+    ans
 }
 
 fn minus(a: String, b: String) {
