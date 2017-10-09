@@ -69,12 +69,12 @@ fn two_s_complement(input: &String, can_display_process: bool) -> String {
     if can_display_process {
         println!("\n2's)\t{}", input);
         println!("─────────────────");
-        println!("\t{}\n", ans);
+        println!("\t{}\n", ans.0);
     }
-    ans
+    ans.0
 }
 
-fn plus(a: &String, b: &String, can_display_process: bool) -> String {
+fn plus(a: &String, b: &String, can_display_process: bool) -> (String, i8) {
     if can_display_process {
         println!("\n\t{}\n+)\t{}", a, b);
     }
@@ -100,7 +100,7 @@ fn plus(a: &String, b: &String, can_display_process: bool) -> String {
         println!("─────────────────");
         println!("\t{} (carry: {})\n", ans, carry);
     }
-    ans
+    (ans, carry)
 }
 
 fn minus(a: &String, b: &String, can_display_process: bool) -> String {
@@ -109,11 +109,11 @@ fn minus(a: &String, b: &String, can_display_process: bool) -> String {
         println!("─────────────────");
     }
     let b_complement = two_s_complement(&b, false);
-    let ans = plus(&a, &b_complement, false);
+    let (ans, carry) = plus(&a, &b_complement, false);
     if can_display_process {
         println!("\t{}\n+)\t{} (2's)", a, b_complement);
         println!("─────────────────");
-        println!("\t{} (carry: )\n", ans);
+        println!("\t{} (carry: {})\n", ans, carry);
     }
     ans
 }
