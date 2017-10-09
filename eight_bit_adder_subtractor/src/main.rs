@@ -46,17 +46,22 @@ fn dec_to_bin(n: i8) -> String {
         count = count + 1;
     }
     if is_neg {
-        let old_ans = ans;
-        ans = String::from("");
-        for i in (0..8).rev() {
-            let old_bit = String::from(&old_ans[i..i+1]).parse::<i8>().unwrap();
-            let bit = (old_bit + 1) % 2;
-            ans.push_str(&bit.to_string()[..]);
-        }
+        ans = one_s_complement(&ans);
+        ans = ans.chars().rev().collect::<String>();
         ans = plus(ans, String::from("00000001"), false);
     }
     else {
         ans = ans.chars().rev().collect::<String>()
+    }
+    ans
+}
+
+fn one_s_complement(input: &String) -> String {
+    let mut ans = String::from("");
+    for i in (0..8) {
+        let old_bit = String::from(&input[i..i+1]).parse::<i8>().unwrap();
+        let bit = (old_bit + 1) % 2;
+        ans.push_str(&bit.to_string()[..]);
     }
     ans
 }
@@ -91,5 +96,6 @@ fn plus(a: String, b: String, display_process: bool) -> String {
 }
 
 fn minus(a: String, b: String, display_process: bool) {
+    // let b_complement
 
 }
