@@ -45,15 +45,13 @@ fn dec_to_bin(n: i8) -> String {
         ans.push('0');
         count = count + 1;
     }
+    ans = ans.chars().rev().collect::<String>();
     if is_neg {
-        ans = ans.chars().rev().collect::<String>();
-        ans = two_s_complement(&ans);
-        // ans = plus(ans, String::from("00000001"), false);
+        two_s_complement(&ans, true)
     }
     else {
-        ans = ans.chars().rev().collect::<String>()
+        ans
     }
-    ans
 }
 
 fn one_s_complement(input: &String) -> String {
@@ -66,13 +64,19 @@ fn one_s_complement(input: &String) -> String {
     ans
 }
 
-fn two_s_complement(input: &String) -> String {
-    plus(&one_s_complement(input), &String::from("00000001"), false)
+fn two_s_complement(input: &String, can_display_process: bool) -> String {
+    let ans = plus(&one_s_complement(input), &String::from("00000001"), false);
+    if can_display_process {
+        println!("\n2's)\t{}", input);
+        println!("─────────────────");
+        println!("\t{}\n", ans);
+    }
+    ans
 }
 
-fn plus(a: &String, b: &String, display_process: bool) -> String {
-    if display_process {
-        println!("\t{}\n+)\t{}", a, b);
+fn plus(a: &String, b: &String, can_display_process: bool) -> String {
+    if can_display_process {
+        println!("\n\t{}\n+)\t{}", a, b);
     }
     let mut ans = String::from("");
     let mut carry = 0i8;
@@ -92,14 +96,14 @@ fn plus(a: &String, b: &String, display_process: bool) -> String {
         ans.push_str(&bit_s.to_string()[..]);
     }
     ans = ans.chars().rev().collect::<String>();
-    if display_process {
+    if can_display_process {
         println!("─────────────────");
-        println!("\t{} (carry: {})", ans, carry);
+        println!("\t{} (carry: {})\n", ans, carry);
     }
     ans
 }
 
-fn minus(a: &String, b: &String, display_process: bool) {
+fn minus(a: &String, b: &String, can_display_process: bool) {
     // let b_complement
 
 }
