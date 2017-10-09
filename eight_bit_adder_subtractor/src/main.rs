@@ -47,7 +47,7 @@ fn dec_to_bin(n: i8) -> String {
     }
     ans = ans.chars().rev().collect::<String>();
     if is_neg {
-        two_s_complement(&ans, true)
+        two_s_complement(&ans, false)
     }
     else {
         ans
@@ -103,7 +103,17 @@ fn plus(a: &String, b: &String, can_display_process: bool) -> String {
     ans
 }
 
-fn minus(a: &String, b: &String, can_display_process: bool) {
-    // let b_complement
-
+fn minus(a: &String, b: &String, can_display_process: bool) -> String {
+    if can_display_process {
+        println!("\n\t{}\n-)\t{}", a, b);
+        println!("─────────────────");
+    }
+    let b_complement = two_s_complement(&b, false);
+    let ans = plus(&a, &b_complement, false);
+    if can_display_process {
+        println!("\t{}\n+)\t{} (2's)", a, b_complement);
+        println!("─────────────────");
+        println!("\t{} (carry: )\n", ans);
+    }
+    ans
 }
