@@ -14,15 +14,15 @@ fn main() {
     // else {
     //     println!("Wrong symbol!");
     // }
-    for i in -128..128 {
-        for j in -128..128 {
-            if is_overflow(plus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false)) {
-                print!("({}+{})", i, j);
-            }
-        }
-        println!("");
-    }
     // for i in -128..128 {
+    //     for j in -128..128 {
+    //         if is_overflow(plus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false)) {
+    //             print!("({}+{})", i, j);
+    //         }
+    //     }
+    //     println!("");
+    // }
+    // // for i in -128..128 {
     //     for j in -128..128 {
     //         if is_overflow(minus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false)) {
     //             print!("({}-{})", i, j);
@@ -79,12 +79,15 @@ fn bin_to_dec(input: &String) -> i8 {
             ans = ans + base.pow(i as u32)*(String::from(&input[7-i..8-i]).parse::<i8>().unwrap());
         }
     }
-    else { // FIXME 10000000 = -128
+    else {
         let tmp = two_s_complement(&input, false);
         for i in 0..7 {
             ans = ans + base.pow(i as u32)*(String::from(&tmp[7-i..8-i]).parse::<i8>().unwrap());
         }
         ans = ans * (-1);
+        if ans == 0 && String::from(&input[..1]).parse::<i8>().unwrap() == 1 {
+            ans = -128;
+        }
     }
     ans
 }
