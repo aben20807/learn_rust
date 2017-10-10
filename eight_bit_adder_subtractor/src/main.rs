@@ -14,22 +14,22 @@ fn main() {
     // else {
     //     println!("Wrong symbol!");
     // }
-    // for i in -128..128 {
-    //     for j in -128..128 {
-    //         if is_overflow(plus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false)) {
-    //             print!("({}+{})", i, j);
-    //         }
-    //     }
-    //     println!("");
-    // }
-    // // for i in -128..128 {
-    //     for j in -128..128 {
-    //         if is_overflow(minus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false)) {
-    //             print!("({}-{})", i, j);
-    //         }
-    //     }
-    //     println!("");
-    // }
+    for i in -128..-126 {
+        for j in 0..1 {
+            if is_overflow(plus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false)) {
+                print!("({}+{})", i, j);
+            }
+        }
+        println!("");
+    }
+    for i in -128..128 {
+        for j in -128..128 {
+            if is_overflow(minus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false)) {
+                print!("({}-{})", i, j);
+            }
+        }
+        println!("");
+    }
     println!("\ndone");
 }
 
@@ -153,17 +153,16 @@ fn minus(a: &String, b: &String, can_display_process: bool) -> (String, i8, bool
     }
     let b_complement = two_s_complement(&b, false);
     let (ans, mut carry, maybe_overflow) = plus(&a, &b_complement, false);
-    carry = (carry + 1)%2;
     if can_display_process {
         println!("\t{} ({})\n+)\t{} ({})\t[2's]", a, bin_to_dec(&a), b_complement, bin_to_dec(&b_complement));
         println!("─────────────────");
         println!("\t{} ({})\t[carry: {}]\n", ans, bin_to_dec(&ans), carry);
     }
-    let maybe_overflow =
-        (String::from(&a[..1]).parse::<i8>().unwrap() == 0 &&
+    let maybe_overflow = &b[..] != "00000000" && // -0 never overflow
+        ((String::from(&a[..1]).parse::<i8>().unwrap() == 0 &&
          String::from(&b[..1]).parse::<i8>().unwrap() == 1) ||
         (String::from(&a[..1]).parse::<i8>().unwrap() == 1 &&
-         String::from(&b[..1]).parse::<i8>().unwrap() == 0);
+         String::from(&b[..1]).parse::<i8>().unwrap() == 0));
     (ans, carry, maybe_overflow)
 }
 
