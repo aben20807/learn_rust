@@ -6,10 +6,10 @@ fn main() {
     scan!("{}\n", s);
     let (a, symbol, b) = statement_analysis(s);
     if symbol == '+' {
-        plus(&dec_to_bin(a), &dec_to_bin(b), true);
+        is_overflow(&plus(&dec_to_bin(a), &dec_to_bin(b), true));
     }
     else if symbol == '-' {
-        minus(&dec_to_bin(a), &dec_to_bin(b), true);
+        is_overflow(&minus(&dec_to_bin(a), &dec_to_bin(b), true));
     }
     else {
         println!("Wrong symbol!");
@@ -119,7 +119,7 @@ fn plus(a: &String, b: &String, can_display_process: bool) -> (String, i8, bool)
     ans = ans.chars().rev().collect::<String>();
     if can_display_process {
         println!("─────────────────");
-        println!("\t{} ({})\t[carry: {}]\n", ans, bin_to_dec(&ans), carry);
+        println!("\t{} ({})\t[carry: {}]", ans, bin_to_dec(&ans), carry);
     }
     let maybe_overflow =
         (String::from(&a[..1]).parse::<i8>().unwrap() == 0 &&
@@ -136,24 +136,26 @@ fn minus(a: &String, b: &String, can_display_process: bool) -> (String, i8, bool
     }
     let b_complement = two_s_complement(&b, false);
     let ans = plus(&a, &b_complement, false);
-    if can_display_process {
-        println!("\t{} ({})\n+)\t{} ({})\t[2's]", a, bin_to_dec(&a), b_complement, bin_to_dec(&b_complement));
-        println!("─────────────────");
-        println!("\t{} ({})\t[carry: {}]\n", ans.0, bin_to_dec(&ans.0), ans.1);
-    }
     let maybe_overflow = &b[..] != "00000000" && // -0 never overflow
         ((String::from(&a[..1]).parse::<i8>().unwrap() == 0 &&
          String::from(&b[..1]).parse::<i8>().unwrap() == 1) ||
         (String::from(&a[..1]).parse::<i8>().unwrap() == 1 &&
          String::from(&b[..1]).parse::<i8>().unwrap() == 0));
+    if can_display_process {
+        println!("\t{} ({})\n+)\t{} ({})\t[2's]", a, bin_to_dec(&a), b_complement, bin_to_dec(&b_complement));
+        println!("─────────────────");
+        println!("\t{} ({})\t[carry: {}]", ans.0, bin_to_dec(&ans.0), ans.1);
+    }
     (ans.0, ans.1, maybe_overflow)
 }
 
 #[allow(unused)]
-fn is_overflow(input: (String, i8, bool)) -> bool {
+fn is_overflow(input: &(String, i8, bool)) -> bool {
     if input.2 && String::from(&input.0[..1]).parse::<i8>().unwrap() != input.1 {
+        println!("\t\t\t[overflow: {}]", true);
         return true;
     }
+    println!("\t\t\t[overflow: {}]", false);
     false
 }
 
@@ -162,7 +164,7 @@ fn overflow_check_all() {
     for i in -128..-126 {
         for j in 0..1 {
             let ans = plus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false);
-            if (i+j != bin_to_dec(&ans.0) as i32) != is_overflow(ans) {
+            if (i+j != bin_to_dec(&ans.0) as i32) != is_overflow(&ans) {
                 print!("({}+{})", i, j);
             }
         }
@@ -170,7 +172,7 @@ fn overflow_check_all() {
     for i in -128..128 {
         for j in -128..128 {
             let ans = minus(&dec_to_bin(i as i8), &dec_to_bin(j as i8), false);
-            if (i-j != bin_to_dec(&ans.0) as i32) != is_overflow(ans) {
+            if (i-j != bin_to_dec(&ans.0) as i32) != is_overflow(&ans) {
                 print!("({}+{})", i, j);
             }
         }
