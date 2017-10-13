@@ -28,7 +28,7 @@ fn statement_analysis(statement: String) -> (i8, char, i8) {
 }
 
 fn dec_to_bin(input: i8) -> String {
-    let mut dec:i32 = input as i32; // Because -128 * (-1) will overflow
+    let mut dec = input as i16; // Because -128 * (-1) will overflow
     let mut ans = String::new();
     let mut count = 0;
     let mut is_neg = false;
@@ -55,24 +55,20 @@ fn dec_to_bin(input: i8) -> String {
 }
 
 fn bin_to_dec(input: &String) -> i8 {
-    let mut ans = 0i8;
-    let base = 2i8;
+    let mut ans = 0i16; // Because minus 128 , '128' will overflow
+    let base = 2i16;
     if &input[..1] == "0" {
         for i in 0..7 {
-            ans = ans + base.pow(i as u32)*(input[7-i..8-i].parse::<i8>().unwrap());
+            ans = ans + base.pow(i as u32)*(input[7-i..8-i].parse::<i16>().unwrap());
         }
     }
     else {
         let tmp = two_s_complement(&input, false);
-        for i in 0..7 {
-            ans = ans + base.pow(i as u32)*(tmp[7-i..8-i].parse::<i8>().unwrap());
-        }
-        ans = ans * (-1);
-        if ans == 0 && input[..1].parse::<i8>().unwrap() == 1 {
-            ans = -128;
+        for i in 0..8 {
+            ans = ans - base.pow(i as u32)*(tmp[7-i..8-i].parse::<i16>().unwrap());
         }
     }
-    ans
+    ans as i8
 }
 
 fn one_s_complement(input: &String) -> String {
@@ -136,7 +132,7 @@ fn minus(a: &String, b: &String, can_display_process: bool) -> (String, i8, bool
     }
     let b_complement = two_s_complement(&b, false);
     let ans = plus(&a, &b_complement, false);
-    let maybe_overflow = &b[..] != "00000000" && ( // -0 never overflow
+    let maybe_overflow = &b[..] != "00000000" && ( // minus 0 never overflow
         (a[..1].parse::<i8>().unwrap() == 0 &&
          b[..1].parse::<i8>().unwrap() == 1) ||
         (a[..1].parse::<i8>().unwrap() == 1 &&
