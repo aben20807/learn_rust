@@ -1,18 +1,26 @@
+use std::io::Write;
 #[macro_use] extern crate text_io;
 
 fn main() {
-    println!("Input: ");
-    let s: String;
-    scan!("{}\n", s);
-    let (a, symbol, b) = statement_analysis(s);
-    if symbol == '+' {
-        is_overflow(&plus(&dec_to_bin(a), &dec_to_bin(b), true));
-    }
-    else if symbol == '-' {
-        is_overflow(&minus(&dec_to_bin(a), &dec_to_bin(b), true));
-    }
-    else {
-        println!("Wrong symbol!");
+    loop {
+        print!("Input: ");
+        std::io::stdout().flush().unwrap();
+        let s: String;
+        scan!("{}\n", s);
+        if s == "e" {
+            break;
+        }
+        let (a, symbol, b) = statement_analysis(s);
+        if symbol == '+' {
+            is_overflow(&plus(&dec_to_bin(a), &dec_to_bin(b), true));
+        }
+        else if symbol == '-' {
+            is_overflow(&minus(&dec_to_bin(a), &dec_to_bin(b), true));
+        }
+        else {
+            println!("Wrong symbol!");
+        }
+        print!("\n\n");
     }
 }
 
