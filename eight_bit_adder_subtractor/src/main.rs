@@ -38,20 +38,14 @@ fn statement_analysis(statement: String) -> (i8, char, i8) {
 fn dec_to_bin(input: i8) -> String {
     let mut dec = input as i16; // Because -128 * (-1) will overflow
     let mut ans = String::new();
-    let mut count = 0;
     let mut is_neg = false;
     if dec < 0 {
         dec = dec * (-1);
         is_neg = true;
     }
-    while dec > 0 {
+    for _ in 0..8 {
         ans.push_str(&(dec % 2).to_string()[..]);
         dec = dec / 2;
-        count = count + 1;
-    }
-    while 8 - count > 0 {
-        ans.push('0');
-        count = count + 1;
     }
     ans = ans.chars().rev().collect::<String>();
     if is_neg {
