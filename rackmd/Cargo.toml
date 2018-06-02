@@ -1,0 +1,8 @@
+[package]
+name = "rackmd"
+version = "0.1.0"
+authors = ["aben20807 <aben20807@gmail.com>"]
+
+[dependencies]
+web-view = "0.2.1"
+markdown = "0.2.0"
