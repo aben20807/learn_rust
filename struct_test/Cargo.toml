@@ -4,3 +4,23 @@ version = "0.1.0"
 authors = ["aben20807 <aben20807@gmail.com>"]
 
 [dependencies]
+
+[[bin]]
+name = "0"
+path = "src/main.rs"
+
+[[bin]]
+name = "1"
+path = "src/struct.rs"
+
+[[bin]]
+name = "2"
+path = "src/struct2.rs"
+
+[[bin]]
+name = "3"
+path = "src/struct3.rs"
+
+[[bin]]
+name = "4"
+path = "src/struct4.rs"
